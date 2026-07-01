@@ -1891,17 +1891,35 @@
       }
       return Number.MAX_SAFE_INTEGER;
     },
-    Ae = (e, t, o, i) => {
-      const s = Array.from(e.querySelectorAll(o));
-      if (s.length === 0) return null;
-      let c = null,
-        p = Number.MAX_SAFE_INTEGER;
-      for (const g of s) {
-        if (i && !i(g)) continue;
-        const y = us(g, t, e);
-        y < p && ((p = y), (c = g));
+    sameBadgeBoundary = (e, t, o) => {
+      if (!o) return !0;
+      try {
+        const i = e.closest(o);
+        return !i || i === t;
+      } catch {
+        return !0;
       }
-      return c;
+    },
+    activeBadgeBoundary = (e, t) => {
+      if (!t) return null;
+      try {
+        return e.matches(t) ? t : null;
+      } catch {
+        return null;
+      }
+    },
+    Ae = (e, t, o, i, s, c) => {
+      const p = Array.from(e.querySelectorAll(o));
+      if (p.length === 0) return null;
+      let g = null,
+        y = Number.MAX_SAFE_INTEGER;
+      for (const d of p) {
+        if (i && !i(d)) continue;
+        if (c && s && !sameBadgeBoundary(d, s, c)) continue;
+        const v = us(d, t, e);
+        v < y && ((y = v), (g = d));
+      }
+      return g;
     },
     Le = (e) => {
       const o = e
@@ -2695,10 +2713,10 @@
       for (; i && i !== t;) (o++, (i = i.parentElement));
       return o;
     },
-    Pt = (e, t, o) => {
+    Pt = (e, t, o, r) => {
       let i = t.parentElement;
       for (; i;) {
-        const s = i.querySelector(o);
+        const s = Ae(i, t, o, void 0, e, r);
         if (s) {
           const c = Qo(s, i);
           if (Qo(t, i) - c > 4) {
@@ -2713,12 +2731,12 @@
       }
       return null;
     },
-    Xr = (e, t, o) => {
+    Xr = (e, t, o, r) => {
       switch (o.type) {
         case "before-selector": {
-          const i = Pt(e, t, o.selector);
+          const i = Pt(e, t, o.selector, r);
           if (!i) break;
-          const s = Ae(i, t, o.selector);
+          const s = Ae(i, t, o.selector, void 0, e, r);
           if (s && s.parentElement)
             return { parent: s.parentElement, before: s };
           break;
@@ -2730,9 +2748,9 @@
           break;
         }
         case "after-selector": {
-          const i = Pt(e, t, o.selector);
+          const i = Pt(e, t, o.selector, r);
           if (!i) break;
-          const s = Ae(i, t, o.selector);
+          const s = Ae(i, t, o.selector, void 0, e, r);
           if (s && s.parentElement) {
             const c = document.querySelector('[role="main"]');
             if (c && !c.contains(s)) break;
@@ -2741,17 +2759,17 @@
           break;
         }
         case "append-to-parent-of-selector": {
-          const i = Pt(e, t, o.selector);
+          const i = Pt(e, t, o.selector, r);
           if (!i) break;
-          const s = Ae(i, t, o.selector);
+          const s = Ae(i, t, o.selector, void 0, e, r);
           if (s?.parentElement)
             return { parent: s.parentElement, before: null };
           break;
         }
         case "append-to-row-from-selector": {
-          const i = Pt(e, t, o.selector);
+          const i = Pt(e, t, o.selector, r);
           if (!i) break;
-          const s = Ae(i, t, o.selector);
+          const s = Ae(i, t, o.selector, void 0, e, r);
           if (!s) break;
           let c = s;
           for (; c && c !== e;) {
@@ -2770,6 +2788,7 @@
             s = Array.from(e.querySelectorAll(i));
           for (let c = 0; c < s.length; c++) {
             const p = s[c];
+            if (r && !sameBadgeBoundary(p, e, r)) continue;
             if (p.textContent?.trim() === o.text) {
               let g = p;
               for (; g.parentElement && g.parentElement !== e;) {
@@ -2788,9 +2807,9 @@
           break;
         }
         case "walk-up-from-selector": {
-          const i = Pt(e, t, o.selector);
+          const i = Pt(e, t, o.selector, r);
           if (!i) break;
-          const s = Ae(i, t, o.selector);
+          const s = Ae(i, t, o.selector, void 0, e, r);
           if (!s) break;
           let c = s,
             p = s.parentElement;
@@ -2816,7 +2835,7 @@
           break;
         }
         case "walk-up-from-container-selector": {
-          const i = Ae(e, t, o.selector);
+          const i = Ae(e, t, o.selector, void 0, e, r);
           if (!i) break;
           let s = i,
             c = i.parentElement;
@@ -2829,21 +2848,21 @@
           break;
         }
         case "after-container-selector": {
-          const i = Ae(e, t, o.selector);
+          const i = Ae(e, t, o.selector, void 0, e, r);
           if (i && i.parentElement)
             return { parent: i.parentElement, before: i.nextElementSibling };
           break;
         }
         case "before-container-selector": {
-          const i = Ae(e, t, o.selector);
+          const i = Ae(e, t, o.selector, void 0, e, r);
           if (i && i.parentElement)
             return { parent: i.parentElement, before: i };
           break;
         }
         case "append-to-selector": {
-          const i = Pt(e, t, o.selector);
+          const i = Pt(e, t, o.selector, r);
           if (!i) break;
-          const s = Ae(i, t, o.selector);
+          const s = Ae(i, t, o.selector, void 0, e, r);
           if (s)
             return o.targetLastChild && s.lastElementChild
               ? { parent: s.lastElementChild, before: null }
@@ -2858,7 +2877,7 @@
           return { parent: e, before: null };
         case "chain": {
           for (const i of o.strategies) {
-            const s = Xr(e, t, i);
+            const s = Xr(e, t, i, r);
             if (s) return s;
           }
           break;
@@ -2866,14 +2885,15 @@
       }
       return null;
     },
-    Rs = (e, t, o) => {
+    Rs = (e, t, o, i) => {
       if (o.type === "chain") {
-        for (const i of o.strategies) if (Xr(e, t, i)) return i;
+        for (const s of o.strategies) if (Xr(e, t, s, i)) return s;
       }
       return o;
     },
-    Ft = (e, t, o, i, s, c) => {
-      const p = Xr(e, t, i);
+    Ft = (e, t, o, i, s, c, r) => {
+      const a = activeBadgeBoundary(e, r),
+        p = Xr(e, t, i, a);
       let g = e;
       if (p) {
         let I = p.parent;
@@ -2906,7 +2926,7 @@
         (o.style.position = "relative"));
       const d = s === "substack-post" ? "0" : s === "reddit-post" ? "1" : "10";
       o.style.zIndex = d;
-      const v = Rs(e, t, i),
+      const v = Rs(e, t, i, a),
         k = v.badgeAlignment ?? c,
         M = document.createElement("div");
       M.className = "pangram-badge-wrapper";
@@ -8255,7 +8275,15 @@
       if (j.silentMode && i === "human") return;
       const k = zs(s, i, t);
       try {
-        Ft(p, g, k, d, e.source, v);
+        Ft(
+          p,
+          g,
+          k,
+          d,
+          e.source,
+          v,
+          e.badgeBoundarySelector || e.commentContainerSelector,
+        );
       } catch {}
     },
     dn = (e) => {
@@ -8280,7 +8308,15 @@
                 ? e.commentBadgeAlignment
                 : e.badgeAlignment,
             y = js(i.offsetWidth);
-          Ft(i, s, y, p, e.source, g);
+          Ft(
+            i,
+            s,
+            y,
+            p,
+            e.source,
+            g,
+            e.badgeBoundarySelector || e.commentContainerSelector,
+          );
         }
       }
     },
@@ -8699,7 +8735,15 @@
             ? e.commentBadgeAlignment
             : e.badgeAlignment,
         v = va(o, e.source, i);
-      Ft(s, p, v, y, e.source, d);
+      Ft(
+        s,
+        p,
+        v,
+        y,
+        e.source,
+        d,
+        e.badgeBoundarySelector || e.commentContainerSelector,
+      );
     },
     yi = (e, t, o) => {
       const i = Ve();
@@ -9029,7 +9073,15 @@
                 !j.silentMode)
               ) {
                 const U = li();
-                Ft(g, c, U, I, o.source, E);
+                Ft(
+                  g,
+                  c,
+                  U,
+                  I,
+                  o.source,
+                  E,
+                  o.badgeBoundarySelector || o.commentContainerSelector,
+                );
               }
               return;
             }
@@ -9098,7 +9150,15 @@
                     },
                   );
                 }),
-                Ft(g, c, U, I, o.source, E));
+                Ft(
+                  g,
+                  c,
+                  U,
+                  I,
+                  o.source,
+                  E,
+                  o.badgeBoundarySelector || o.commentContainerSelector,
+                ));
               return;
             }
             const O = Hn.get(L);
@@ -9395,7 +9455,15 @@
         if (i.hasAttribute("data-pangram-scanned")) continue;
         i.setAttribute("data-pangram-scanned", "true");
         const s = Ia();
-        Ft(i, o, s, e.badgeInsertion, e.source, e.badgeAlignment);
+        Ft(
+          i,
+          o,
+          s,
+          e.badgeInsertion,
+          e.source,
+          e.badgeAlignment,
+          e.badgeBoundarySelector || e.commentContainerSelector,
+        );
       }
       if (e.source === "x-article") {
         const o = Dn.configs["x-post"];
