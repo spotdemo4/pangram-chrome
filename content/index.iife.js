@@ -1056,7 +1056,14 @@
         t ? "Object is not iterable." : "Symbol.iterator is not defined.",
       );
     },
-    Cs = { x: !0, linkedin: !0, reddit: !0, substack: !0, medium: !0 },
+    Cs = {
+      x: !0,
+      linkedin: !0,
+      reddit: !0,
+      substack: !0,
+      medium: !0,
+      github: !0,
+    },
     bs = {
       buttonVisibility: !1,
       permanentlyHideIcon: !0,
@@ -1535,6 +1542,7 @@
       "substack-post": "substack",
       "reddit-post": "reddit",
       "medium-post": "medium",
+      "github-post": "github",
     },
     Wr = [
       { hostnames: ["x.com", "twitter.com"], source: "x-article" },
@@ -1546,6 +1554,7 @@
       { hostnames: ["substack.com"], source: "substack-post" },
       { hostnames: ["www.reddit.com", "reddit.com"], source: "reddit-post" },
       { hostnames: ["medium.com"], source: "medium-post" },
+      { hostnames: ["github.com"], source: "github-post" },
     ];
   Wr.map((e) => e.source);
   const Bn = {
@@ -1786,6 +1795,36 @@
                 selector: 'div:has(> [data-testid="storyReadTime"])',
               },
               { type: "absolute-top-right", top: "0px", right: "40px" },
+            ],
+          },
+        },
+        "github-post": {
+          postTextSelector:
+            '.pull-discussion-timeline .timeline-comment[id^="pullrequest-"] .comment-body.js-comment-body, .pull-discussion-timeline .timeline-comment-group[id^="issuecomment-"] .comment-body.js-comment-body',
+          postContainerSelector:
+            '.timeline-comment[id^="pullrequest-"], .timeline-comment-group[id^="issuecomment-"]',
+          commentContainerSelector:
+            '.timeline-comment-group[id^="issuecomment-"]',
+          badgeBoundarySelector:
+            '.timeline-comment[id^="pullrequest-"], .timeline-comment-group[id^="issuecomment-"]',
+          authorSelector: ".timeline-comment-header .author",
+          dateSelector: ".timeline-comment-header relative-time",
+          minWords: 50,
+          maxWords: 500,
+          defaultContentType: "post",
+          badgeAlignment: "left",
+          badgeInsertion: {
+            type: "chain",
+            strategies: [
+              {
+                type: "after-selector",
+                selector: ".timeline-comment-header .author",
+              },
+              {
+                type: "append-to-selector",
+                selector: ".timeline-comment-header",
+              },
+              { type: "absolute-top-right", top: "8px", right: "48px" },
             ],
           },
         },
@@ -8575,7 +8614,9 @@
               D &&
                 (ie = D.startsWith("http")
                   ? D
-                  : `${window.location.origin}${D}`);
+                  : i.source === "github-post"
+                    ? new URL(D, window.location.href).href
+                    : `${window.location.origin}${D}`);
             }
             const fe = Yr(i.source),
               ve = Xo.get(t) || window.location.href;
@@ -9015,6 +9056,10 @@
                   container: g,
                   fiberFullText: v,
                   hasShowMore: k,
+                  isComment:
+                    e.source === "github-post" &&
+                    !!e.commentContainerSelector &&
+                    g.matches(e.commentContainerSelector),
                 });
               },
             );
@@ -9039,6 +9084,7 @@
             hasShowMore: d,
             isComment: v,
           }) => {
+            v && g.setAttribute("data-pangram-comment", "");
             const k = zs(n, g, c);
             if (
               k?.platformId &&
@@ -9235,7 +9281,9 @@
               D = $
                 ? $.startsWith("http")
                   ? $
-                  : `${window.location.origin}${$}`
+                  : n.source === "github-post"
+                    ? new URL($, window.location.href).href
+                    : `${window.location.origin}${$}`
                 : "";
             let Q = "";
             const ee = g.getAttribute("post-title");
@@ -9755,7 +9803,9 @@
             ((U.silentMode = y.feedScanMode === "silent"), nr(e));
           return;
         }
-        const v = n && y.feedScanPlatforms?.[n] === !1;
+        const v =
+          y.feedScanEnabled === !1 ||
+          (n && y.feedScanPlatforms?.[n] === !1);
         v && !U.platformDisabled
           ? ((U.platformDisabled = !0), co())
           : !v &&
@@ -9772,7 +9822,10 @@
         Xa();
         return;
       }
-      if (n && i.feedScanPlatforms?.[n] === !1) {
+      if (
+        i.feedScanEnabled === !1 ||
+        (n && i.feedScanPlatforms?.[n] === !1)
+      ) {
         U.platformDisabled = !0;
         return;
       }

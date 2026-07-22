@@ -2,6 +2,12 @@ Pangram's AI Detection Chrome extension, extracted at version 2.4.0
 
 https://chromewebstore.google.com/detail/eakpippijmmohmdlpgcjnipolcgciaga
 
+## GitHub Pull Requests
+
+The extension scans rendered pull request descriptions and top-level issue
+comments on the GitHub Conversation tab. Text must meet Pangram's 50-word
+minimum. Review comments and text currently being edited are not scanned.
+
 ## Reddit Badge Placement Fix
 
 This extracted extension was inspected because Reddit comment badges could appear one comment off. The scan result was still associated with the correct comment, but the visual badge could be inserted into the first nested reply's metadata row.
