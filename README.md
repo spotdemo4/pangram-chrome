@@ -16,3 +16,9 @@ The fix makes badge selector resolution boundary-aware:
 - Badge insertion call sites now pass the configured boundary into the shared insertion helpers.
 
 Validation was done against a live nested Reddit thread. With the updated logic, the parent comment's own metadata row is selected instead of the first reply's metadata row.
+
+## Installation
+
+1. Select **Code** and **Download ZIP** on GitHub, then extract the archive.
+2. Open `chrome://extensions` and enable **Developer mode**.
+3. Select **Load unpacked** and choose the extracted directory.
