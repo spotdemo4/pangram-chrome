@@ -1817,12 +1817,14 @@
             type: "chain",
             strategies: [
               {
-                type: "after-selector",
-                selector: ".timeline-comment-header .author",
+                type: "before-selector",
+                selector: ".timeline-comment-actions",
+                reserveSpace: true,
               },
               {
                 type: "append-to-selector",
                 selector: ".timeline-comment-header",
+                reserveSpace: true,
               },
               { type: "absolute-top-right", top: "8px", right: "48px" },
             ],
@@ -2984,6 +2986,13 @@
     position: relative;
     z-index: ${d};
   `),
+        v.reserveSpace &&
+          ((M.style.width = "max-content"),
+          (M.style.minWidth = "max-content"),
+          (M.style.maxWidth = "none"),
+          (M.style.height = "auto"),
+          (M.style.display = "inline-flex"),
+          (M.style.marginLeft = "8px")),
         (n.style.pointerEvents = "auto"),
         M.appendChild(n));
       const N = M;
@@ -3018,7 +3027,7 @@
           ((n.style.flexShrink = "0"),
           (n.style.verticalAlign = "middle"),
           (n.style.display = "inline-flex"),
-          (n.style.marginLeft = "4px")),
+          (n.style.marginLeft = v.reserveSpace ? "0" : "4px")),
         v.type === "append-to-row-from-selector" &&
           p &&
           (n.style.marginLeft = "4px"),
