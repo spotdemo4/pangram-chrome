@@ -1,11 +1,11 @@
 {
-"update_url": "https://clients2.google.com/service/update2/crx",
-"key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArtal9kuYYpC3XQarmTieCoSG+w9NwwA3W7cPirVBUK1dG5aqfaJCcuTv4f1pjwrFIMnZUKl+OFJNXxkT7nwX4RzTnSv8c+6zOElFT5V2XuTatMsVGW4WLZ7x5LqKH/i80VRzuuCi03O8MapCBORB3p3QUUvLDPQdZwC34HAq7YzqVh4VlcZFjPZd9YLohEYS/NaUQZyVMWaE2eYhzc81i6cY4i3xQPtDil71MDRLRdZZJIlEL3kGdT2EJHt3mL3d0Bfi5BjyidW6S26fjUR9dJ7WTh8U9lpdhqfD57b8ot8f3PC4ch83VlVi4nRWGBNHBqtVSM47GulTfwkwFrsuGQIDAQAB",
+  "update_url": "https://clients2.google.com/service/update2/crx",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArtal9kuYYpC3XQarmTieCoSG+w9NwwA3W7cPirVBUK1dG5aqfaJCcuTv4f1pjwrFIMnZUKl+OFJNXxkT7nwX4RzTnSv8c+6zOElFT5V2XuTatMsVGW4WLZ7x5LqKH/i80VRzuuCi03O8MapCBORB3p3QUUvLDPQdZwC34HAq7YzqVh4VlcZFjPZd9YLohEYS/NaUQZyVMWaE2eYhzc81i6cY4i3xQPtDil71MDRLRdZZJIlEL3kGdT2EJHt3mL3d0Bfi5BjyidW6S26fjUR9dJ7WTh8U9lpdhqfD57b8ot8f3PC4ch83VlVi4nRWGBNHBqtVSM47GulTfwkwFrsuGQIDAQAB",
 
   "manifest_version": 3,
   "default_locale": "en",
   "name": "__MSG_extensionName__",
-  "version": "2.3.3",
+  "version": "2.4.0",
   "description": "__MSG_extensionDescription__",
   "permissions": [
     "activeTab",
@@ -24,9 +24,7 @@
     "service_worker": "background.iife.js",
     "type": "module"
   },
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup/index.html",
     "default_icon": "icon-34.png"
@@ -45,35 +43,17 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "<all_urls>"
-      ],
-      "js": [
-        "content/index.iife.js"
-      ],
+      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "js": ["content/index.iife.js"],
       "all_frames": true
     },
     {
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "<all_urls>"
-      ],
-      "js": [
-        "content-ui/index.iife.js"
-      ]
+      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "js": ["content-ui/index.iife.js"]
     },
     {
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "<all_urls>"
-      ],
-      "css": [
-        "content.css"
-      ]
+      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
+      "css": ["content.css"]
     }
   ],
   "content_security_policy": {
@@ -91,9 +71,7 @@
         "fonts/*",
         "side-panel/index.html"
       ],
-      "matches": [
-        "*://*/*"
-      ]
+      "matches": ["*://*/*"]
     }
   ]
 }

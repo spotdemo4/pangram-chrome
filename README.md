@@ -1,4 +1,4 @@
-Pangram's AI Detection Chrome extension, extracted at version 2.3.3
+Pangram's AI Detection Chrome extension, extracted at version 2.4.0
 
 https://chromewebstore.google.com/detail/eakpippijmmohmdlpgcjnipolcgciaga
 
