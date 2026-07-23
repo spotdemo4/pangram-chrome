@@ -8964,16 +8964,19 @@
           }
           const g = p.closest(e.postContainerSelector);
           if (!g) return;
-          const y = (
-            (e.source === "github-post"
-              ? g
-                  .querySelector('clipboard-copy[role="menuitem"][value]')
-                  ?.getAttribute("value")
-              : "") ||
-            p.innerText ||
-            p.textContent ||
-            ""
-          ).trim();
+          let y;
+          if (e.source === "github-post") {
+            const E = g.querySelector(
+              'clipboard-copy[role="menuitem"][value]',
+            );
+            if (!E) {
+              g.querySelector(".timeline-comment-actions details-menu[preload]")
+                ?.closest("details")
+                ?.dispatchEvent(new MouseEvent("mouseover", { bubbles: !0 }));
+              return;
+            }
+            y = (E.getAttribute("value") || "").trim();
+          } else y = (p.innerText || p.textContent || "").trim();
           if (g.hasAttribute("data-pangram-scanned")) {
             if (c.has(g))
               if (
