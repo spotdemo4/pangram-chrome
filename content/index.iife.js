@@ -8888,9 +8888,9 @@
       return (e.innerText || e.textContent || "").trim();
     },
     er = (e) => e.replace(/\s+/g, " ").trim().slice(0, 40),
-    ki = (e, t) => {
-      const n = e.getAttribute("data-pangram-text-key");
-      return n === null || er(t.textContent || "") === n
+    ki = (e, t, n) => {
+      const i = e.getAttribute("data-pangram-text-key");
+      return i === null || er(n ?? t.textContent ?? "") === i
         ? !1
         : (e.removeAttribute("data-pangram-scanned"),
           e.removeAttribute("data-pangram-text-key"),
@@ -8964,7 +8964,16 @@
           }
           const g = p.closest(e.postContainerSelector);
           if (!g) return;
-          const y = (p.innerText || p.textContent || "").trim();
+          const y = (
+            (e.source === "github-post"
+              ? g
+                  .querySelector('clipboard-copy[role="menuitem"][value]')
+                  ?.getAttribute("value")
+              : "") ||
+            p.innerText ||
+            p.textContent ||
+            ""
+          ).trim();
           if (g.hasAttribute("data-pangram-scanned")) {
             if (c.has(g))
               if (
@@ -8983,7 +8992,9 @@
                     ?.removeAttribute("data-pangram-text-id"),
                   c.delete(g));
               else return;
-            else if (!ki(g, p))
+            else if (
+              !ki(g, p, e.source === "github-post" ? y : void 0)
+            )
               if (
                 !(
                   !!g.querySelector(".pangram-badge-wrapper") ||
@@ -9013,7 +9024,7 @@
           } else
             e.source === "substack-post"
               ? (d = Qn(p))
-              : (d = (p.innerText || p.textContent || "").trim());
+              : (d = y);
           let v = !1,
             k = !1;
           if (e.source === "x-post") {

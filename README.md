@@ -4,9 +4,10 @@ https://chromewebstore.google.com/detail/eakpippijmmohmdlpgcjnipolcgciaga
 
 ## GitHub Pull Requests
 
-The extension scans rendered pull request descriptions and top-level issue
-comments on the GitHub Conversation tab. Text must meet Pangram's 50-word
-minimum. Review comments and text currently being edited are not scanned.
+The extension scans the source Markdown of pull request descriptions and
+top-level issue comments on the GitHub Conversation tab. Text must meet
+Pangram's 50-word minimum. Review comments and text currently being edited are
+not scanned.
 
 ## Reddit Badge Placement Fix
 
